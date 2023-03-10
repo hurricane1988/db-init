@@ -14,8 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package main
+package databases
 
-func main() {
+import (
+	"db-init/conf"
+	"strings"
+)
 
+// DbInitHandler 数据库初始化处理方法
+func DbInitHandler() {
+	// 加载全局config
+	var cfg = conf.GlobalConfig
+	// 如果数据库类型是MySQL数据库
+	if strings.EqualFold(cfg.Type, conf.MySQL) {
+
+	}
 }

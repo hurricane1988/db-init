@@ -37,7 +37,7 @@ type MysqlDB struct {
 }
 
 // New 初始化MySQL数据库
-func New(config *ms.MySQL) (*MysqlDB, error) {
+func New(config *MySQL) (*MysqlDB, error) {
 	var (
 		db  *sql.DB
 		err error
@@ -57,10 +57,12 @@ func New(config *ms.MySQL) (*MysqlDB, error) {
 }
 
 // Exec MySQL写入操作
-func (m *MysqlDB) Exec(sqlFile string) {
+func (m *MysqlDB) Exec(sqlFile string) error {
 	_, err := m.DB.Exec(sqlFile)
 	if err != nil {
 		logger.Error("执行sql文件失败,错误信息", err)
+		return err
 	}
 	logger.Info("初始化数据库成功!")
+	return
 }

@@ -22,6 +22,24 @@ import (
 	"github.com/wonderivan/logger"
 )
 
+// MySQL 定义全局常量
+const (
+	MySQL  = "mysql"
+	Oracle = "oracle"
+)
+
+// GlobalConfig 定义全局配置
+var GlobalConfig *Config
+
+// 初始化全局配置
+func init() {
+	conf, err := LoadConfigFromFile()
+	if err != nil {
+		GlobalConfig = nil
+	}
+	GlobalConfig = conf
+}
+
 // LoadConfigFromFile 初始化配置文件
 func LoadConfigFromFile() (*Config, error) {
 	// 设置viper的环境变量前缀

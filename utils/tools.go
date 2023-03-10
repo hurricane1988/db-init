@@ -17,20 +17,20 @@ limitations under the License.
 package utils
 
 import (
-	ms "db-init/utils/db/mysql"
+	v5 "db-init/utils/db/mysql/versions/v5"
 	"fmt"
 	"github.com/wonderivan/logger"
 	"io/ioutil"
 )
 
 // InitMysqlConfig 初始化MySQL配置
-func InitMysqlConfig(config *ms.MySQL) string {
+func InitMysqlConfig(config *v5.MySQL) string {
 	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
 		config.Username,
 		config.Password,
 		config.Host,
 		config.Port,
-		config.DB)
+		config.Database)
 }
 
 // LoadFile 读取sql文件

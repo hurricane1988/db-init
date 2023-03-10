@@ -28,5 +28,5 @@ type mySQLConfig struct {
 	Password string `json:"password" description:"数据库链接密码" example:"password"`
 	Port     string `json:"port" description:"数据库链接端口" example:"3306"`
 	Version  string `json:"version,omitempty" description:"MySQL数据库版本" example:"v5"`
-	DB       string `json:"db,omitempty" description:"MySQL数据库DB" example:"mysql"`
+	Database string `json:"database,omitempty" description:"MySQL数据库DB" example:"mysql"`
 }

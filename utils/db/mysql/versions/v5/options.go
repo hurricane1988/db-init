@@ -15,3 +15,18 @@ limitations under the License.
 */
 
 package v5
+
+import (
+	"sync"
+)
+
+// MySQL 定义数据库链接结构体
+type MySQL struct {
+	Host     string     `json:"host" xml:"host" yaml:"host"description:"数据库链接地址"`
+	Username string     `json:"username" xml:"username" yaml:"username"description:"数据库链接账号"`
+	Password string     `json:"password" xml:"password" yaml:"password" description:"数据库链接密码"`
+	Port     string     `json:"port" xml:"port" yaml:"port"description:"数据库链接端口"`
+	Version  string     `json:"version" xml:"version" yaml:"version"description:"MySQL数据库版本"`
+	Mutex    sync.Mutex `json:"mutex,omitempty" xml:"mutex" yaml:"mutex" description:"MySQL数据库互斥锁"`
+	Database string     `json:"database,omitempty" xml:"database" yaml:"database"description:"MySQL数据库DB"`
+}
