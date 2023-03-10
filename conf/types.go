@@ -18,6 +18,7 @@ package conf
 
 // Config 定义MySQL数据库全局配置结构体
 type Config struct {
+	Type        string      `json:"type" yaml:"type" xml:"type" description:"数据库类型" example:"mysql\oracle\"`
 	MySQLConfig mySQLConfig `json:"mySQLConfig" yaml:"mySQLConfig" xml:"mySQLConfig"`
 }
 

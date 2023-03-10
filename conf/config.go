@@ -50,6 +50,7 @@ func LoadConfigFromFile() (*Config, error) {
 // NewConfig 创建config
 func NewConfig(viper *viper.Viper) *Config {
 	return &Config{
+		Type:        viper.GetString("type"),
 		MySQLConfig: *NewMySQLConfig(viper),
 	}
 }

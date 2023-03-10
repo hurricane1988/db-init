@@ -14,31 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package utils
+package cmd
 
 import (
-	ms "db-init/utils/db/mysql"
-	"fmt"
-	"github.com/wonderivan/logger"
-	"io/ioutil"
+	"github.com/spf13/cobra"
+	"log"
+	"os"
 )
 
-// InitMysqlConfig 初始化MySQL配置
-func InitMysqlConfig(config *ms.MySQL) string {
-	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
-		config.Username,
-		config.Password,
-		config.Host,
-		config.Port,
-		config.DB)
+// 定义rootCmd
+var rootCmd = &cobra.Command{
+	Use:   "db-init",
+	Short: "db-init is a tool that execute all kinds of databases init.",
+	Run: func(cmd *cobra.Command, args []string) {
+	},
 }
 
-// LoadFile 读取sql文件
-func LoadFile(filePath string) (string, error) {
-	Byte, err := ioutil.ReadFile(filePath)
-	if err != nil {
-		logger.Error("读取文件 "+filePath+"失败,错误信息", err.Error())
-		return "", err
+// Execute 定义cobra执行器
+func Execute() {
+	if err := rootCmd.Execute(); err != nil {
+		log.Println(err)
+		os.Exit(1)
 	}
-	return string(Byte), nil
 }
