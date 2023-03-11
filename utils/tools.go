@@ -17,28 +17,29 @@ limitations under the License.
 package utils
 
 import (
-	ms "db-init/utils/db/mysql"
+	"db-init/conf"
 	"fmt"
 	"github.com/wonderivan/logger"
 	"io/ioutil"
 )
 
 // InitMysqlConfig 初始化MySQL配置
-func InitMysqlConfig(config *ms.MySQL) string {
+func InitMysqlConfig(config conf.Options) string {
 	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
 		config.Username,
 		config.Password,
 		config.Host,
 		config.Port,
-		config.DB)
+		config.Database)
 }
 
-// ReadSqlFile 读取sql文件
-func ReadSqlFile(sql string) (string, error) {
-	sqlByte, err := ioutil.ReadFile(sql)
+// LoadFile 读取sql文件
+func LoadFile(filePath string) (string, error) {
+	Byte, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		logger.Error("读取SQL文件失败,")
+		logger.Error("读取文件 "+filePath+"失败,错误信息", err.Error())
 		return "", err
 	}
-	return string(sqlByte), nil
+	fmt.Println(string(Byte))
+	return string(Byte), nil
 }

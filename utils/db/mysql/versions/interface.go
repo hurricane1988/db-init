@@ -17,3 +17,8 @@ limitations under the License.
 // TODO: 参考链接https://github.com/hurricane1988/kubesphere-v321/tree/master/pkg/simple/client/es/versions
 
 package versions
+
+// Client 不同客户端接口集合
+type Client interface {
+	Exec(sqlFile string) error
+}

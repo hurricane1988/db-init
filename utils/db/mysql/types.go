@@ -15,3 +15,7 @@ limitations under the License.
 */
 
 package mysql
+
+import (
+	_ "sync"
+)

@@ -14,4 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package v5
+package cmd
+
+import (
+	"github.com/spf13/cobra"
+	"log"
+	"os"
+)
+
+// 定义rootCmd
+var rootCmd = &cobra.Command{
+	Use:   "db-init",
+	Short: "db-init is a tool that execute all kinds of databases init.",
+	Run: func(cmd *cobra.Command, args []string) {
+	},
+}
+
+// Execute 定义cobra执行器
+func Execute() {
+	if err := rootCmd.Execute(); err != nil {
+		log.Println(err)
+		os.Exit(1)
+	}
+}

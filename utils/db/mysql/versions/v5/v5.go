@@ -18,8 +18,8 @@ package v5
 
 import (
 	"database/sql"
+	"db-init/conf"
 	"db-init/utils"
-	ms "db-init/utils/db/mysql"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/wonderivan/logger"
 	"sync"
@@ -30,22 +30,22 @@ const (
 	DriverName = "mysql"
 )
 
-// MysqlDB 数据库客户端结构体
-type MysqlDB struct {
+// MySQL 数据库客户端结构体
+type MySQL struct {
 	DB    *sql.DB    `json:"db" description:"MySQL数据库输出化"`
 	Mutex sync.Mutex `json:"mutex" description:"MySQL数据库互斥锁"`
 }
 
 // New 初始化MySQL数据库
-func New(config *ms.MySQL) (*MysqlDB, error) {
+func New(config conf.Options) (*MySQL, error) {
 	var (
 		db  *sql.DB
 		err error
 	)
 	// 连接MySQL数据库
 	db, _ = sql.Open(DriverName, utils.InitMysqlConfig(config))
-	db.SetConnMaxLifetime(ms.SetConnMaxLifetime)
-	db.SetMaxIdleConns(ms.SetMaxIdleConns)
+	db.SetConnMaxLifetime(conf.SetConnMaxLifetime)
+	db.SetMaxIdleConns(conf.SetMaxIdleConns)
 	// 验证数据库链接
 	if err = db.Ping(); err != nil {
 		logger.Error("打开数据库失败,错误信息 ", err.Error())
@@ -53,14 +53,16 @@ func New(config *ms.MySQL) (*MysqlDB, error) {
 	}
 	// 关闭MySQL连接
 	defer db.Close()
-	return &MysqlDB{db, sync.Mutex{}}, nil
+	return &MySQL{DB: db, Mutex: sync.Mutex{}}, nil
 }
 
 // Exec MySQL写入操作
-func (m *MysqlDB) Exec(sqlFile string) {
+func (m *MySQL) Exec(sqlFile string) error {
 	_, err := m.DB.Exec(sqlFile)
 	if err != nil {
 		logger.Error("执行sql文件失败,错误信息", err)
+		return err
 	}
 	logger.Info("初始化数据库成功!")
+	return nil
 }

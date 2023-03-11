@@ -14,8 +14,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package main
+package utils
 
-func main() {
+import (
+	"testing"
+)
 
+func TestLoadFile(t *testing.T) {
+	type args struct {
+		filePath string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+		{
+			name:    "测试读取文件方法",
+			wantErr: false,
+			args: args{
+				filePath: "test.sql",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := LoadFile(tt.args.filePath)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("LoadFile() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+		})
+	}
 }

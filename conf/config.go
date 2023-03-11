@@ -22,6 +22,31 @@ import (
 	"github.com/wonderivan/logger"
 )
 
+// MySQL 定义全局常量
+const (
+	MySQL   = "mysql"
+	Oracle  = "oracle"
+	Version = "v1"
+	MysqlV5 = "5"
+	MysqlV8 = "8"
+	// SetConnMaxLifetime 设置数据库最大连接数
+	SetConnMaxLifetime = 100
+	// SetMaxIdleConns 设置上数据库最大闲置连接数
+	SetMaxIdleConns = 10
+)
+
+// GlobalConfig 定义全局配置
+var GlobalConfig *Config
+
+// 初始化全局配置
+func init() {
+	conf, err := LoadConfigFromFile()
+	if err != nil {
+		GlobalConfig = nil
+	}
+	GlobalConfig = conf
+}
+
 // LoadConfigFromFile 初始化配置文件
 func LoadConfigFromFile() (*Config, error) {
 	// 设置viper的环境变量前缀
@@ -50,6 +75,7 @@ func LoadConfigFromFile() (*Config, error) {
 // NewConfig 创建config
 func NewConfig(viper *viper.Viper) *Config {
 	return &Config{
+		Type:        viper.GetString("type"),
 		MySQLConfig: *NewMySQLConfig(viper),
 	}
 }
@@ -62,6 +88,6 @@ func NewMySQLConfig(viper *viper.Viper) *mySQLConfig {
 		Password: viper.GetString("MYSQL_PASSWORD"),
 		Port:     viper.GetString("MYSQL_PORT"),
 		Version:  viper.GetString("MYSQL_VERSION"),
-		DB:       viper.GetString("MYSQL_DB"),
+		Database: viper.GetString("MYSQL_DB"),
 	}
 }
