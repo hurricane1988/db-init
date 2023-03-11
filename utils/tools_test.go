@@ -17,29 +17,34 @@ limitations under the License.
 package utils
 
 import (
-	"db-init/conf"
-	"fmt"
-	"github.com/wonderivan/logger"
-	"io/ioutil"
+	"testing"
 )
 
-// InitMysqlConfig 初始化MySQL配置
-func InitMysqlConfig(config conf.Options) string {
-	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
-		config.Username,
-		config.Password,
-		config.Host,
-		config.Port,
-		config.Database)
-}
-
-// LoadFile 读取sql文件
-func LoadFile(filePath string) (string, error) {
-	Byte, err := ioutil.ReadFile(filePath)
-	if err != nil {
-		logger.Error("读取文件 "+filePath+"失败,错误信息", err.Error())
-		return "", err
+func TestLoadFile(t *testing.T) {
+	type args struct {
+		filePath string
 	}
-	fmt.Println(string(Byte))
-	return string(Byte), nil
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+		{
+			name:    "测试读取文件方法",
+			wantErr: false,
+			args: args{
+				filePath: "test.sql",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := LoadFile(tt.args.filePath)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("LoadFile() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+		})
+	}
 }

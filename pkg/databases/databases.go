@@ -18,15 +18,42 @@ package databases
 
 import (
 	"db-init/conf"
+	"db-init/utils/db/mysql"
+	"errors"
+	"github.com/wonderivan/logger"
 	"strings"
+	"sync"
 )
 
-// DbInitHandler 数据库初始化处理方法
-func DbInitHandler() {
+// DBInitHandler 数据库初始化处理方法
+func DBInitHandler(filePath string) error {
 	// 加载全局config
-	var cfg = conf.GlobalConfig
+	var (
+		options = conf.GlobalConfig.MySQLConfig
+	)
 	// 如果数据库类型是MySQL数据库
-	if strings.EqualFold(cfg.Type, conf.MySQL) {
-
+	if strings.EqualFold(conf.GlobalConfig.Type, conf.MySQL) {
+		mysqlClient, err := mysql.NewClient(
+			options.Host,
+			options.Username,
+			options.Password,
+			options.Port,
+			options.Database,
+			options.Version,
+			sync.Mutex{})
+		if err != nil {
+			panic(err)
+			return nil
+		}
+		/* 初始化MySQL数据库 */
+		// 初始化数据库失败，执行SQL异常
+		if err = mysqlClient.Exec(filePath); err != nil {
+			logger.Error("执行SQL文件 "+filePath+"失败,错误信息", err)
+			return err
+		}
+		// 初始化数据库成功
+		return nil
+	} else {
+		return errors.New("数据库版本不执行")
 	}
 }

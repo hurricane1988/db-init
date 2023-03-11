@@ -17,21 +17,12 @@ limitations under the License.
 package mysql
 
 import (
+	"db-init/conf"
 	"db-init/utils/db/mysql/versions"
 	v5 "db-init/utils/db/mysql/versions/v5"
 	"fmt"
 	"github.com/wonderivan/logger"
 	"sync"
-)
-
-// 定义MySQL版本常量
-const (
-	MysqlV5 = "5"
-	MysqlV8 = "8"
-	// SetConnMaxLifetime 设置数据库最大连接数
-	SetConnMaxLifetime = 100
-	// SetMaxIdleConns 设置上数据库最大闲置连接数
-	SetMaxIdleConns = 10
 )
 
 // Client 定义client客户端结构体
@@ -58,8 +49,8 @@ func NewClient(host, username, password, port, database, version string, mutex s
 		port:     port,
 	}
 	switch m.version {
-	case MysqlV5:
-		config := v5.MySQL{
+	case conf.MysqlV5:
+		config := v5.Options{
 			Host:     host,
 			Username: username,
 			Password: password,
@@ -95,10 +86,10 @@ func (c *Client) LoadClient() error {
 
 	// 判断不同MySQL版本
 	switch c.version {
-	case MysqlV5:
-		vc, err = v5.New(&v5.MySQL{Host: c.host, Username: c.username, Password: c.password, Port: c.port, Version: c.version, Database: c.database, Mutex: c.mux})
+	case conf.MySQL:
+		vc, err = v5.New(&v5.Options{Host: c.host, Username: c.username, Password: c.password, Port: c.port, Version: c.version, Database: c.database, Mutex: c.mux})
 	default:
-		err = fmt.Errorf("unsupported MySQL version %s", c.version)
+		err = fmt.Errorf("不支持的MySQL版本%s", c.version)
 	}
 	if err != nil {
 		return err
