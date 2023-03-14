@@ -27,7 +27,7 @@ import (
 const (
 	// Parameter 第一个参数默认值
 	Parameter = "start"
-	// 默认读取SQL文件路径
+	// FilePath 默认读取SQL文件路径
 	FilePath = "./"
 )
 

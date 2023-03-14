@@ -16,10 +16,6 @@ limitations under the License.
 
 package conf
 
-import (
-	"sync"
-)
-
 // Config 定义MySQL数据库全局配置结构体
 type Config struct {
 	Type        string      `json:"type" yaml:"type" xml:"type" description:"数据库类型" example:"mysql\oracle\"`
@@ -37,11 +33,11 @@ type mySQLConfig struct {
 
 // Options 定义数据库链接结构体
 type Options struct {
-	Host     string     `json:"host" xml:"host" yaml:"host"description:"数据库链接地址"`
-	Username string     `json:"username" xml:"username" yaml:"username"description:"数据库链接账号"`
-	Password string     `json:"password" xml:"password" yaml:"password" description:"数据库链接密码"`
-	Port     string     `json:"port" xml:"port" yaml:"port"description:"数据库链接端口"`
-	Version  string     `json:"version" xml:"version" yaml:"version"description:"MySQL数据库版本"`
-	Mutex    sync.Mutex `json:"mutex,omitempty" xml:"mutex" yaml:"mutex" description:"MySQL数据库互斥锁"`
-	Database string     `json:"database,omitempty" xml:"database" yaml:"database"description:"MySQL数据库DB"`
+	Host     string `json:"host" xml:"host" yaml:"host"description:"数据库链接地址"`
+	Username string `json:"username" xml:"username" yaml:"username"description:"数据库链接账号"`
+	Password string `json:"password" xml:"password" yaml:"password" description:"数据库链接密码"`
+	Port     string `json:"port" xml:"port" yaml:"port"description:"数据库链接端口"`
+	Version  string `json:"version" xml:"version" yaml:"version"description:"MySQL数据库版本"`
+	// Mutex    sync.Mutex `json:"mutex,omitempty" xml:"mutex" yaml:"mutex" description:"MySQL数据库互斥锁"`
+	Database string `json:"database,omitempty" xml:"database" yaml:"database"description:"MySQL数据库DB"`
 }

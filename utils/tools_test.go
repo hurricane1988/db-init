@@ -17,33 +17,41 @@ limitations under the License.
 package utils
 
 import (
+	"reflect"
 	"testing"
 )
 
 func TestLoadFile(t *testing.T) {
 	type args struct {
-		filePath string
+		directory string
+		suffix    string
 	}
 	tests := []struct {
 		name    string
 		args    args
+		want    string
 		wantErr bool
 	}{
 		// TODO: Add test cases.
 		{
-			name:    "测试读取文件方法",
+			name:    "测试",
 			wantErr: false,
+			want:    "SELECT EXISTS(SELECT 1 FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'exampledb')",
 			args: args{
-				filePath: "test.sql",
+				directory: "./",
+				suffix:    ".sql",
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			_, err := LoadFile(tt.args.filePath)
+			got, err := LoadSuffixFile(tt.args.directory, tt.args.suffix)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("LoadFile() error = %v, wantErr %v", err, tt.wantErr)
 				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("LoadFile() got = %v, want %v", got, tt.want)
 			}
 		})
 	}

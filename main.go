@@ -16,6 +16,10 @@ limitations under the License.
 
 package main
 
-func main() {
+import (
+	"db-init/cmd"
+)
 
+func main() {
+	cmd.Execute()
 }

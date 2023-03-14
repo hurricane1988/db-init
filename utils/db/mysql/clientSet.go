@@ -50,7 +50,7 @@ func NewClient(host, username, password, port, database, version string, mutex s
 	}
 	switch m.version {
 	case conf.MysqlV5:
-		config := v5.Options{
+		config := conf.Options{
 			Host:     host,
 			Username: username,
 			Password: password,
@@ -59,7 +59,7 @@ func NewClient(host, username, password, port, database, version string, mutex s
 			Database: database,
 			Mutex:    mutex,
 		}
-		m.client, err = v5.New(&config)
+		m.client, err = v5.New(config)
 	default:
 		return nil, fmt.Errorf("不支持的数据库版本 %s", m.version)
 	}
@@ -87,7 +87,7 @@ func (c *Client) LoadClient() error {
 	// 判断不同MySQL版本
 	switch c.version {
 	case conf.MySQL:
-		vc, err = v5.New(&v5.Options{Host: c.host, Username: c.username, Password: c.password, Port: c.port, Version: c.version, Database: c.database, Mutex: c.mux})
+		vc, err = v5.New(conf.Options{Host: c.host, Username: c.username, Password: c.password, Port: c.port, Version: c.version, Database: c.database, Mutex: c.mux})
 	default:
 		err = fmt.Errorf("不支持的MySQL版本%s", c.version)
 	}
