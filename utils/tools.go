@@ -20,11 +20,16 @@ import (
 	"db-init/conf"
 	"fmt"
 	"github.com/wonderivan/logger"
+	"io/fs"
 	"io/ioutil"
+	"path"
+	"path/filepath"
+	"reflect"
 )
 
 // InitMysqlConfig 初始化MySQL配置
 func InitMysqlConfig(config conf.Options) string {
+	// 格式化数据库连接并返回
 	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
 		config.Username,
 		config.Password,
@@ -33,13 +38,52 @@ func InitMysqlConfig(config conf.Options) string {
 		config.Database)
 }
 
-// LoadFile 读取sql文件
-func LoadFile(filePath string) (string, error) {
-	Byte, err := ioutil.ReadFile(filePath)
+// LoadSuffixFile 读取sql文件
+func LoadSuffixFile(directory, suffix string) (string, error) {
+	// 定义局部变量
+	var (
+		files     []string
+		fileNames []string
+	)
+	// 遍历指定目录下所有的文件
+	err := filepath.Walk(directory, func(path string, info fs.FileInfo, err error) error {
+		files = append(files, path)
+		return nil
+	})
 	if err != nil {
-		logger.Error("读取文件 "+filePath+"失败,错误信息", err.Error())
-		return "", err
+		logger.Error(err)
 	}
-	fmt.Println(string(Byte))
-	return string(Byte), nil
+	// 判断文件是否包含指定的文件后缀
+	for _, file := range files {
+		if !reflect.DeepEqual(path.Ext(file), suffix) {
+			continue
+		}
+		fileNames = append(fileNames, file)
+	}
+	// 文件内容读取
+	content, err := ReadFiles(fileNames)
+	if err != nil {
+		logger.Error(err)
+	}
+	return content, nil
+}
+
+// ReadFiles 读取文件内容并返回string
+func ReadFiles(files []string) (string, error) {
+	// 定义全局变量
+	var (
+		contentBytes []byte
+	)
+	for _, file := range files {
+		content, err := ioutil.ReadFile(file)
+		if err != nil {
+			return "", err
+		}
+		// []byte append至[]byte
+		contentBytes = append(contentBytes, content...)
+		// 读取文件添加换行符
+		contentBytes = append(contentBytes, []byte("\n")...)
+	}
+	// byte转为string
+	return string(contentBytes), nil
 }
