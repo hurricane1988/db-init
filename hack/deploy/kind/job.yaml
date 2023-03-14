@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-init
+  namespace: default
+  labels:
+    app: db-init
+spec:
+  template:
+    metadata:
+      name: db-init
+    spec:
+      containers:
+        - name: db-init
+          image: db-init:v1.0.0
+          imagePullPolicy: Always
+          command:
+            - db-init
+          args:
+            - start
+      restartPolicy: OnFailure
