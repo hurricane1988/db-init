@@ -19,7 +19,7 @@ package v5
 import (
 	"database/sql"
 	"db-init/conf"
-	"db-init/utils"
+	"db-init/utils/tools"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/wonderivan/logger"
 	"sync"
@@ -30,20 +30,20 @@ const (
 	DriverName = "mysql"
 )
 
-// MySQL 数据库客户端结构体
-type MySQL struct {
+// MySqlV5  数据库客户端结构体
+type MySqlV5 struct {
 	DB    *sql.DB    `json:"db" description:"MySQL数据库输出化"`
 	Mutex sync.Mutex `json:"mutex" description:"MySQL数据库互斥锁"`
 }
 
 // New 初始化MySQL数据库
-func New(config conf.Options) (*MySQL, error) {
+func New(config conf.Options) (*MySqlV5, error) {
 	var (
 		db  *sql.DB
 		err error
 	)
 	// 连接MySQL数据库
-	db, _ = sql.Open(DriverName, utils.InitMysqlConfig(config))
+	db, _ = sql.Open(DriverName, tools.InitMysqlConfig(config))
 	db.SetConnMaxLifetime(conf.SetConnMaxLifetime)
 	db.SetMaxIdleConns(conf.SetMaxIdleConns)
 	// 验证数据库链接
@@ -53,12 +53,21 @@ func New(config conf.Options) (*MySQL, error) {
 	}
 	// 关闭MySQL连接
 	defer db.Close()
-	return &MySQL{DB: db, Mutex: sync.Mutex{}}, nil
+	return &MySqlV5{DB: db}, nil
 }
 
 // Exec MySQL写入操作
-func (m *MySQL) Exec(sqlFile string) error {
-	_, err := m.DB.Exec(sqlFile)
+func (m *MySqlV5) Exec(directory, suffix string) error {
+	var (
+		// 定义全局异常错误
+		err error
+	)
+	// 初始化配置加载文件配置
+	file, err := tools.LoadSuffixFile(directory, suffix)
+	if err != nil {
+		return err
+	}
+	_, err = m.DB.Exec(file)
 	if err != nil {
 		logger.Error("执行sql文件失败,错误信息", err)
 		return err

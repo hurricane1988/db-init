@@ -26,7 +26,7 @@ import (
 )
 
 // DBInitHandler 数据库初始化处理方法
-func DBInitHandler(filePath string) error {
+func DBInitHandler(directory, suffix string) error {
 	// 加载全局config
 	var (
 		options = conf.GlobalConfig.MySQLConfig
@@ -47,8 +47,8 @@ func DBInitHandler(filePath string) error {
 		}
 		/* 初始化MySQL数据库 */
 		// 初始化数据库失败，执行SQL异常
-		if err = mysqlClient.Exec(filePath); err != nil {
-			logger.Error("执行SQL文件 "+filePath+"失败,错误信息", err)
+		if err = mysqlClient.Exec(directory, suffix); err != nil {
+			logger.Error("执行SQL文件 "+directory+"失败,错误信息", err)
 			return err
 		}
 		// 初始化数据库成功

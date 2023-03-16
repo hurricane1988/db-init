@@ -14,11 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO: 参考链接https://github.com/hurricane1988/kubesphere-v321/tree/master/pkg/simple/client/es/versions
+package terminal
 
-package versions
+import (
+	"testing"
+)
 
-// MySQLClient 定义全局MySQL客户端
-type MySQLClient interface {
-	Exec(directory, suffix string) error
+func TestTerminalColor(t *testing.T) {
+	tests := []struct {
+		name string
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			TerminalColor()
+		})
+	}
 }

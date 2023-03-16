@@ -14,11 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO: 参考链接https://github.com/hurricane1988/kubesphere-v321/tree/master/pkg/simple/client/es/versions
+package databases
 
-package versions
+import (
+	"testing"
+)
 
-// MySQLClient 定义全局MySQL客户端
-type MySQLClient interface {
-	Exec(directory, suffix string) error
+func TestDBInitHandler(t *testing.T) {
+	type args struct {
+		directory string
+		suffix    string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := DBInitHandler(tt.args.directory, tt.args.suffix); (err != nil) != tt.wantErr {
+				t.Errorf("DBInitHandler() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
 }
