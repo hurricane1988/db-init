@@ -47,7 +47,7 @@ var InitDB = &cobra.Command{
 		} else {
 			switch args[0] {
 			case Parameter:
-				databases.DBInitHandler()
+				databases.DBInitHandler(conf.Directory, conf.Suffix)
 			default:
 				logger.Warn("输入的参数有误")
 			}

@@ -27,14 +27,14 @@ import (
 
 // Client 定义client客户端结构体
 type Client struct {
-	host     string          `json:"host" xml:"host" yaml:"host"`
-	username string          `json:"username,omitempty" xml:"username" yaml:"username"`
-	password string          `json:"password" xml:"password" yaml:"password"`
-	port     string          `json:"port" xml:"port" yaml:"port"`
-	database string          `json:"database" xml:"database" yaml:"database"`
-	version  string          `json:"version" xml:"version" yaml:"version"`
-	client   versions.Client `json:"client" yaml:"c" xml:"c"`
-	mux      sync.Mutex      `json:"mux" xml:"mux" yaml:"mux"`
+	host     string               `json:"host" xml:"host" yaml:"host"`
+	username string               `json:"username,omitempty" xml:"username" yaml:"username"`
+	password string               `json:"password" xml:"password" yaml:"password"`
+	port     string               `json:"port" xml:"port" yaml:"port"`
+	database string               `json:"database" xml:"database" yaml:"database"`
+	version  string               `json:"version" xml:"version" yaml:"version"`
+	client   versions.MySQLClient `json:"client" yaml:"c" xml:"c"`
+	mux      sync.Mutex           `json:"mux" xml:"mux" yaml:"mux"`
 }
 
 // NewClient 初始化数据库客户端
@@ -57,7 +57,6 @@ func NewClient(host, username, password, port, database, version string, mutex s
 			Version:  version,
 			Port:     port,
 			Database: database,
-			Mutex:    mutex,
 		}
 		m.client, err = v5.New(config)
 	default:
@@ -80,14 +79,14 @@ func (c *Client) LoadClient() error {
 		return nil
 	}
 	var (
-		vc  versions.Client
+		vc  versions.MySQLClient
 		err error
 	)
 
 	// 判断不同MySQL版本
 	switch c.version {
 	case conf.MySQL:
-		vc, err = v5.New(conf.Options{Host: c.host, Username: c.username, Password: c.password, Port: c.port, Version: c.version, Database: c.database, Mutex: c.mux})
+		vc, err = v5.New(conf.Options{Host: c.host, Username: c.username, Password: c.password, Port: c.port, Version: c.version, Database: c.database})
 	default:
 		err = fmt.Errorf("不支持的MySQL版本%s", c.version)
 	}
@@ -99,13 +98,13 @@ func (c *Client) LoadClient() error {
 }
 
 // Exec 执行SQL操作
-func (c *Client) Exec(sqlFile string) error {
+func (c *Client) Exec(directory, suffix string) error {
 	var err error
 	err = c.LoadClient()
 	if err != nil {
 		return err
 	}
-	err = c.client.Exec(sqlFile)
+	err = c.client.Exec(directory, suffix)
 	if err != nil {
 		logger.Error("执行sql文件失败,错误信息", err)
 	}

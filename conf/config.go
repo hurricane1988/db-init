@@ -33,6 +33,10 @@ const (
 	SetConnMaxLifetime = 100
 	// SetMaxIdleConns 设置上数据库最大闲置连接数
 	SetMaxIdleConns = 10
+	// Suffix 读取配置文件后缀
+	Suffix = ".sql"
+	// Directory 全局directory
+	Directory = "/opt"
 )
 
 // GlobalConfig 定义全局配置
@@ -75,7 +79,7 @@ func LoadConfigFromFile() (*Config, error) {
 // NewConfig 创建config
 func NewConfig(viper *viper.Viper) *Config {
 	return &Config{
-		Type:        viper.GetString("type"),
+		Type:        viper.GetString("TYPE"),
 		MySQLConfig: *NewMySQLConfig(viper),
 	}
 }
