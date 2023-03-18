@@ -31,6 +31,14 @@ func TestDBInitHandler(t *testing.T) {
 		wantErr bool
 	}{
 		// TODO: Add test cases.
+		{
+			name:    "数据库初始化单元测试",
+			wantErr: false,
+			args: args{
+				directory: "./",
+				suffix:    ".sql",
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
